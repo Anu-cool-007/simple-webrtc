@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Answer| Simple WebRTC</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div>
+      <textarea
+        placeholder="Paste offer sdp"
+        id="offer-sdp"
+        cols="100"
+        rows="10"
+      ></textarea
+      ><br />
+      <button onclick="answerCall()">Answer Call</button>
+    </div>
+    <p id="answer-sdp"></p>
+    <div>
+      <video class="my-video" autoplay id="my-video"></video>
+      <video class="remote-video" autoplay id="remote-video"></video>
+    </div>
+    <script src="answer.js"></script>
+  </body>
+</html>
