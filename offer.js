@@ -1,12 +1,11 @@
-let offerSdp = document.getElementById("offer-sdp");
-let myVideo = document.getElementById("my-video");
-let remoteVideo = document.getElementById("remote-video");
-let answerSdp = document.getElementById("answer-sdp");
+const offerSdp = document.getElementById("offer-sdp");
+const myVideo = document.getElementById("my-video");
+const remoteVideo = document.getElementById("remote-video");
+const answerSdp = document.getElementById("answer-sdp");
 
-let peer;
+const peer = new RTCPeerConnection();
 
 startCall = () => {
-  peer = new RTCPeerConnection();
   navigator.mediaDevices
     .getUserMedia({ video: true, audio: true })
     .then((stream) => {
@@ -22,21 +21,18 @@ startCall = () => {
 };
 
 startConnection = (stream) => {
-  stream.getTracks().forEach((track) => peer.addTrack(track));
+  stream.getTracks().forEach((track) => peer.addTrack(track, stream));
 
-  peer.onTrack = ({ streams: [stream] }) => {
-    console.log("recieved stream");
-    remoteVideo.srcObject = stream;
-  };
+  peer.addEventListener(
+    "track",
+    (e) => {
+      remoteVideo.srcObject = e.streams[0];
+    },
+    false
+  );
 
-  peer.onicegatheringstatechange = (event) => {
-    let connection = event.target;
-    if (connection.iceGatheringState == "complete") {
-      offerSdp.innerHTML = JSON.stringify(peer.localDescription);
-    }
-  };
   peer.onicecandidate = ({ candidate }) => {
-    console.log(candidate);
+    offerSdp.innerHTML = JSON.stringify(peer.localDescription);
   };
 
   peer.createOffer().then((offer) => peer.setLocalDescription(offer));
